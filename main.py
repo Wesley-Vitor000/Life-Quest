@@ -21,6 +21,7 @@ def exibir_status(jogador):
     print(f"Nível: {jogador['nivel']}")
     print(f"XP: {jogador['xp']}")
     print(f"Título: {jogador['titulo']}")
+    print("Digite 0 para voltar ao menu.")
 
 
 
@@ -30,6 +31,7 @@ def exibir_missoes(missoes):
     print("\n===== QUADRO DE MISSÕES =====")
     for i, missao in enumerate(missoes):
         print(f"{i + 1}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}\nStatus: {missao['status']}\n")
+    print("Digite 0 para voltar ao menu.")
 
 
 
@@ -52,7 +54,7 @@ def iniciar_missao(missao):
 
 
 # Função para atualizar o progresso da missão
-def atualizar_progresso(missao, incremento):
+def atualizar_progresso(missao, incremento):     
     missao['progresso'] += incremento
     if missao['progresso'] >= missao['meta']:
         missao['status'] = 'concluida'
@@ -116,19 +118,42 @@ while True:
     
     if opcao == "1":
         exibir_status(jogador)
+        voltar_status = int(input(">>> "))
+        
+        if voltar_status == 0:
+            continue
+        
     elif opcao == "2":
         exibir_missoes(missoes)
-    elif opcao == "3":
-        exibir_missoes(missoes)
-        escolha_missao = input("Digite o número conrrespondente a missão desejada: ")
+        voltar_quadro_missoes = int(input(">>> "))
         
-        if escolha_missao.isdigit() >= 0 and escolha_missao <= len(missoes):
-            iniciar_missao()
+        if voltar_quadro_missoes == 0:
+            continue
+        
+    elif opcao == "3":
+        print("Digite o número conrrespondente a missão desejada")
+        exibir_missoes(missoes)
+        escolha_missao = input(">>> ")
+        
+        if escolha_missao.isdigit():
+            escolha_missao_int = int(escolha_missao) - 1
+        else:
+            print("Erro. o caractere digitado não é um número.")
+        if escolha_missao_int == 0:
+            continue
+        elif escolha_missao_int >= 1 and escolha_missao_int <= len(missoes):
+            missao_escolhida = missoes[escolha_missao_int]
+            iniciar_missao(missao_escolhida)
+        
+        
     elif opcao == "4":
         exibir_missoes(missoes)
         opcao_progresso = int(input("Qual missão você deseja atualizar o seu progresso? ")) - 1
         missao_selecionada = missoes[opcao_progresso]
         print(f"Você escolheu a missão: {missao_selecionada['nome']}.")
+        
+        progresso_incremento = int(input(f"Digite a quantidade de {missao_selecionada['unidade']} que você deseja adicionar ao progresso da missão: "))
+        atualizar_progresso(missao_selecionada, progresso_incremento)
         
         
     elif opcao == "0":
