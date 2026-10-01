@@ -136,15 +136,17 @@ while True:
         escolha_missao = input(">>> ")
         
         if escolha_missao.isdigit():
-            escolha_missao_int = int(escolha_missao) - 1
-        else:
-            print("Erro. o caractere digitado não é um número.")
-        if escolha_missao_int == 0:
-            continue
-        elif escolha_missao_int >= 1 and escolha_missao_int <= len(missoes):
-            missao_escolhida = missoes[escolha_missao_int]
-            iniciar_missao(missao_escolhida)
-        
+            escolha_missao_int = int(escolha_missao)
+            
+            if escolha_missao_int == "0":
+                continue
+            
+            elif escolha_missao_int >= 1 and escolha_missao_int <= len(missoes):
+                indice = escolha_missao_int - 1
+                missao_escolhida = missoes[indice]           
+                iniciar_missao(missao_escolhida)
+            else:
+                print("Opção inválida. Por favor, escolha uma missão válida.")
         
     elif opcao == "4":
         exibir_missoes(missoes)
