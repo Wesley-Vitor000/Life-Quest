@@ -116,20 +116,24 @@ while True:
     exibir_menu()
     opcao = input(">>> ")
     
+    
+    # Exibir status do jogador
     if opcao == "1":
         exibir_status(jogador)
         voltar_status = int(input(">>> "))
         
         if voltar_status == 0:
             continue
-        
+    
+    # Exibir quadro de missões    
     elif opcao == "2":
         exibir_missoes(missoes)
         voltar_quadro_missoes = int(input(">>> "))
         
         if voltar_quadro_missoes == 0:
             continue
-        
+    
+    # Iniciar missão    
     elif opcao == "3":
         print("Digite o número conrrespondente a missão desejada")
         exibir_missoes(missoes)
@@ -138,26 +142,52 @@ while True:
         if escolha_missao.isdigit():
             escolha_missao_int = int(escolha_missao)
             
-            if escolha_missao_int == "0":
+            if escolha_missao_int == 0:
                 continue
             
             elif escolha_missao_int >= 1 and escolha_missao_int <= len(missoes):
                 indice = escolha_missao_int - 1
                 missao_escolhida = missoes[indice]           
                 iniciar_missao(missao_escolhida)
-            else:
-                print("Opção inválida. Por favor, escolha uma missão válida.")
-        
+        else:
+            print("Opção inválida. Por favor, escolha uma missão válida.")
+    
+    # Atualizar progresso da missão    
     elif opcao == "4":
         exibir_missoes(missoes)
-        opcao_progresso = int(input("Qual missão você deseja atualizar o seu progresso? ")) - 1
-        missao_selecionada = missoes[opcao_progresso]
-        print(f"Você escolheu a missão: {missao_selecionada['nome']}.")
+        opcao_progresso = input("Qual missão você deseja atualizar o seu progresso? ")
         
-        progresso_incremento = int(input(f"Digite a quantidade de {missao_selecionada['unidade']} que você deseja adicionar ao progresso da missão: "))
-        atualizar_progresso(missao_selecionada, progresso_incremento)
+        if opcao_progresso.isdigit():
+            opcao_progresso_int = int(opcao_progresso)
+            
+            if opcao_progresso_int == 0:
+                continue 
+            elif opcao_progresso_int >= 1 and opcao_progresso_int <= len(missoes):
+                opcao_progresso = opcao_progresso_int - 1
+                missao_selecionada = missoes[opcao_progresso]
+                
+                if missao_selecionada['status'] == 'concluida':
+                    print(f"A missão '{missao_selecionada['nome']}' já foi concluída. Escolha outra missão.")
+                    continue
+                elif missao_selecionada['status'] == 'nao iniciada':
+                    print(f"A missão '{missao_selecionada['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
+                    continue
+                elif missao_selecionada['status'] == 'em andamento':
+                    print(f"Você escolheu a missão: {missao_selecionada['nome']}.")
+                    progresso_incremento = input(f"Digite a quantidade de {missao_selecionada['unidade']} que você deseja adicionar ao progresso da missão: ")
+            else:
+                print("Opção inválida. Por favor, escolha uma missão válida.")
+                continue
         
         
+        if progresso_incremento.isdigit():
+            progresso_incremento_int = int(progresso_incremento)
+            atualizar_progresso(missao_selecionada, progresso_incremento_int)
+        else:
+            print("Opção inválida. Por favor, insira um número válido.")
+        
+    
+    # Sair do programa
     elif opcao == "0":
         print("Saindo do programa.. até a próxima!")
         break
