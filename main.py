@@ -155,16 +155,16 @@ while True:
     # Atualizar progresso da missão    
     elif opcao == "4":
         exibir_missoes(missoes)
-        opcao_progresso = input("Qual missão você deseja atualizar o seu progresso? ")
+        missao_atualizar = input("Qual missão você deseja atualizar o seu progresso? ")
         
-        if opcao_progresso.isdigit():
-            opcao_progresso_int = int(opcao_progresso)
+        if missao_atualizar.isdigit():
+            indice = int(missao_atualizar)
             
-            if opcao_progresso_int == 0:
+            if indice == 0:
                 continue 
-            elif opcao_progresso_int >= 1 and opcao_progresso_int <= len(missoes):
-                opcao_progresso = opcao_progresso_int - 1
-                missao_selecionada = missoes[opcao_progresso]
+            elif indice >= 1 and indice <= len(missoes):
+                indice -= 1
+                missao_selecionada = missoes[indice]
                 
                 if missao_selecionada['status'] == 'concluida':
                     print(f"A missão '{missao_selecionada['nome']}' já foi concluída. Escolha outra missão.")
@@ -175,14 +175,14 @@ while True:
                 elif missao_selecionada['status'] == 'em andamento':
                     print(f"Você escolheu a missão: {missao_selecionada['nome']}.")
                     progresso_incremento = input(f"Digite a quantidade de {missao_selecionada['unidade']} que você deseja adicionar ao progresso da missão: ")
+                    
+                    if progresso_incremento.isdigit() and int(progresso_incremento) > 0:
+                        progresso_incremento = int(progresso_incremento)
+                        atualizar_progresso(missao_selecionada, progresso_incremento)
+                    else:
+                        print("Opção inválida. Por favor, insira um número válido.")
             else:
-                print("Opção inválida. Por favor, escolha uma missão válida.")
-                continue
-        
-        
-        if progresso_incremento.isdigit():
-            progresso_incremento_int = int(progresso_incremento)
-            atualizar_progresso(missao_selecionada, progresso_incremento_int)
+                print("Opção inválida. Por favor, insira um número de uma missão válida.")
         else:
             print("Opção inválida. Por favor, insira um número válido.")
         
