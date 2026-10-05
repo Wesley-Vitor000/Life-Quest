@@ -88,7 +88,7 @@ def verificar_nivel(jogador):
         
         if jogador["nivel"] in titulos:
             jogador["titulo"] = titulos[jogador["nivel"]]        
-            print(f"🏆 Novo título conquistado!\n⚔️ {jogador["titulo"]}")
+            print(f"🏆 Novo título conquistado!\n⚔️ {jogador['titulo']}")
             
         xp_restante = xp_atual - jogador["proximo_nivel"]
         xp_atual = xp_restante
@@ -230,12 +230,18 @@ while True:
                     if missao_selecionada["status"] != "em andamento":
                         print(f"A missão '{missao_selecionada['nome']}' não está em andamento. Por favor, inicie a missão antes de atualizar o progresso.")
                         continue
-
-                    progresso_incremento = input(f"Quanto de progresso você deseja adicionar à missão '{missao_selecionada['nome']}'? ")
-                
-                    if progresso_incremento.isdigit() and int(progresso_incremento) > 0:
-                        progresso_incremento = int(progresso_incremento)
-                        atualizar_progresso(missao_selecionada, progresso_incremento)
+                    
+                    # While do incremento de progresso
+                    while True:
+                        progresso_incremento = input(f"Quanto de progresso você deseja adicionar à missão '{missao_selecionada['nome']}'? ")
+                        
+                        if progresso_incremento.isdigit() and int(progresso_incremento) > 0:
+                            progresso_incremento = int(progresso_incremento)
+                            atualizar_progresso(missao_selecionada, progresso_incremento)
+                            break  # Sai do loop após atualizar o progresso
+                        else:
+                            print("Opção inválida. Por favor, insira um número válido maior que 0.")
+                            continue
                         
                         # While da pergunta
                         while True:
