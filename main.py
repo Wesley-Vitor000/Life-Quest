@@ -243,23 +243,23 @@ while True:
                             print("Opção inválida. Por favor, insira um número válido maior que 0.")
                             continue
                         
-                        # While da pergunta
-                        while True:
-                            continuar_atualizacao = input("Deseja atualizar outra missão? (s/n): ")
-                            
-                            if continuar_atualizacao.lower() == "s":
-                                break
-                            elif continuar_atualizacao.lower() == "n":
-                                break
-                            else:
-                                print("Opção inválida. Por favor, insira 's' para sim ou 'n' para não.")
+                    # While da pergunta
+                    while True:
+                        continuar_atualizacao = input("Deseja atualizar outra missão? (s/n): ")
+                        
+                        if continuar_atualizacao.lower() == "s":
+                            break
+                        elif continuar_atualizacao.lower() == "n":
+                            break
+                        else:
+                            print("Opção inválida. Por favor, insira 's' para sim ou 'n' para não.")
                         
                         # Sai do loop principal se o usuário não quiser continuar atualizando
                         if continuar_atualizacao.lower() == "n":
                             break
                         
-                    else:
-                        print("Opção inválida. Por favor, insira um número válido.")
+                        else:
+                            print("Opção inválida. Por favor, insira um número válido.")
                 
                 else:
                     print("Opção inválida. Por favor, escolha uma missão válida.")
