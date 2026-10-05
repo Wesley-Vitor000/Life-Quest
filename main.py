@@ -33,15 +33,6 @@ def exibir_status(jogador):
     print("Digite 0 para voltar ao menu.")
 
 
-# Exibir quadro de missões
-def exibir_missoes(missoes):
-    print("\n===== QUADRO DE MISSÕES =====")
-    for i, missao in enumerate(missoes):
-        print(
-            f"{i + 1}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n"
-        )
-    print("Digite 0 para voltar ao menu.")
-
 
 # Função para iniciar a missão
 def iniciar_missao(missao):
@@ -96,6 +87,40 @@ def verificar_nivel(jogador):
         jogador["proximo_nivel"] = int(
         jogador["proximo_nivel"] * 1.5)  # Aumenta a meta para o próximo nível
         print(f"Requisito para o próximo nível: {jogador['proximo_nivel']} XP")
+
+
+# Função exibir quadro de missões e iniciar missão
+def exibir_quadro_missoes_e_iniciar(missoes):
+    print("\n===== QUADRO DE MISSÕES =====")
+    
+    while True:
+        indice = 0
+        missao = missoes[indice]
+        soma_de_indice = 1
+        
+        print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
+        print("[A] Anterior | [P] Próximo | [I] Iniciar Missão | [0] Voltar ao Menu")
+        escolha = input(">>> ").lower()
+        
+        if escolha == "a":
+            if indice > 0:
+                indice -= 1
+            else:
+                print("Você já está na primeira missão.")
+        
+        elif escolha == "p":
+            if indice < len(missoes) -1:
+                indice += 1
+            else:
+                print("Você já está na última missão.")
+        elif escolha == "i":
+            iniciar_missao(missao)
+        elif escolha == "0":
+            break
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+
+
 
 
 # Dados do Jogador
@@ -178,7 +203,7 @@ while True:
     # Exibir quadro de missões
     elif opcao == "2":
         while True:
-            exibir_missoes(missoes)
+            exibir_quadro_missoes_e_iniciar(missoes)
             voltar_quadro_missoes = input(">>> ")
             
             if voltar_quadro_missoes.isdigit() and int(voltar_quadro_missoes) == 0:
@@ -191,7 +216,7 @@ while True:
     elif opcao == "3":
         while True:
             print("Digite o número correspondente a missão desejada")
-            exibir_missoes(missoes)
+            exibir_quadro_missoes_e_iniciar(missoes)
             escolha_missao = input(">>> ")
             
             if escolha_missao.isdigit():
@@ -215,7 +240,7 @@ while True:
     # Atualizar progresso da missão
     elif opcao == "4":
         while True:
-            exibir_missoes(missoes)
+            exibir_quadro_missoes_e_iniciar(missoes)
             missao_atualizar = input("Qual missão você deseja atualizar o seu progresso? ")
             
             if missao_atualizar.isdigit():
@@ -271,3 +296,5 @@ while True:
     elif opcao == "0":
         print("Saindo do programa.. até a próxima!")
         break
+    else:
+        print("Opção inválida. Por favor, escolha uma opção válida.")
