@@ -93,8 +93,9 @@ def verificar_nivel(jogador):
 def exibir_quadro_missoes_e_iniciar(missoes):
     print("\n===== QUADRO DE MISSÕES =====")
     
+    indice = 0
+    
     while True:
-        indice = 0
         missao = missoes[indice]
         soma_de_indice = 1
         
