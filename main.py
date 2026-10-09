@@ -8,8 +8,7 @@ def exibir_menu():
     print("\n===== MENU PRINCIPAL =====")
     print("1. Exibir status do jogador")
     print("2. Exibir quadro de missões")
-    print("3. Iniciar missão")
-    print("4. Atualizar progresso da missão")
+    print("3. Atualizar progresso da missão")
     print("0. Sair do jogo")
 
 
@@ -117,7 +116,7 @@ def exibir_quadro_missoes_e_iniciar(missoes):
         elif escolha == "i":
             iniciar_missao(missao)
         elif escolha == "0":
-            break
+            return escolha
         else:
             print("Opção inválida. Por favor, escolha uma opção válida.")
 
@@ -203,43 +202,12 @@ while True:
 
     # Exibir quadro de missões
     elif opcao == "2":
-        while True:
-            exibir_quadro_missoes_e_iniciar(missoes)
-            voltar_quadro_missoes = input(">>> ")
-            
-            if voltar_quadro_missoes.isdigit() and int(voltar_quadro_missoes) == 0:
-                break
-            else:
-                print("Opção inválida. Por favor, digite 0 para voltar ao menu.")
 
+        exibir_quadro_missoes_e_iniciar(missoes)
 
-    # Iniciar missão
-    elif opcao == "3":
-        while True:
-            print("Digite o número correspondente a missão desejada")
-            exibir_quadro_missoes_e_iniciar(missoes)
-            escolha_missao = input(">>> ")
-            
-            if escolha_missao.isdigit():
-                escolha_missao_int = int(escolha_missao)
-                if escolha_missao_int == 0:
-                    break
-
-                elif escolha_missao_int >= 1 and escolha_missao_int <= len(missoes):
-                    indice = escolha_missao_int - 1
-                    missao_escolhida = missoes[indice]
-                    iniciar_missao(missao_escolhida)
-                    
-                    break  # Sai do loop após iniciar a missão
-                else:
-                    print("Opção inválida. Por favor, escolha uma missão válida ou digite 0 para voltar ao menu.")
-                
-            else:
-                print("Opção inválida. Por favor, escolha uma missão válida ou digite 0 para voltar ao menu.")
-
-
+    
     # Atualizar progresso da missão
-    elif opcao == "4":
+    elif opcao == "3":
         while True:
             exibir_quadro_missoes_e_iniciar(missoes)
             missao_atualizar = input("Qual missão você deseja atualizar o seu progresso? ")
