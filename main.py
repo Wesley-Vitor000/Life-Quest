@@ -1,5 +1,10 @@
 # Life Quest
 
+# IMPORTS
+import json
+
+
+
 # Funções do APP
 
 
@@ -49,7 +54,7 @@ def iniciar_missao(missao):
 
 
 # Função para atualizar o progresso da missão
-def atualizar_progresso(missao, incremento):
+def atualizar_progresso(jogador,missao, incremento):
     
     if missao["status"] != "em andamento":
         print(f"A missão '{missao['nome']}' não está em andamento. Por favor, inicie a missão antes de atualizar o progresso.")
@@ -150,7 +155,20 @@ def selecionar_missao_para_atualizar(missoes):
             break
         else:
             print("Opção inválida. Por favor, escolha uma missão válida ou 0 para voltar ao menu.")
-    
+
+
+
+# Função para salvar o jogo
+def salvar_jogo(jogador, missoes):
+    with open("save.json", "w", encoding="utf-8") as arquivo:
+        json.dump({"jogador": jogador, "missoes": missoes}, arquivo, ensure_ascii=False, indent=4)
+
+
+# Função para carregar o jogo
+def carregar_jogo():
+    with open("save.json", "r", encoding="utf-8") as arquivo:
+        dados_jogo = json.load(arquivo)
+        return dados_jogo["jogador"], dados_jogo["missoes"]
 
 # Dados do Jogador
 jogador = {
@@ -213,6 +231,10 @@ nome = input("Digite o seu nome aventureiro: ")
 jogador["nome"] = nome
 
 
+# TESTE JSON
+jogador = carregar_jogo()
+
+
 while True:
     exibir_menu()
     opcao = input(">>> ")
@@ -248,7 +270,7 @@ while True:
                 
                 if progresso_incremento.isdigit() and int(progresso_incremento) > 0:
                     progresso_incremento = int(progresso_incremento)
-                    atualizar_progresso(missao_selecionada, progresso_incremento)
+                    atualizar_progresso(jogador, missao_selecionada, progresso_incremento)
                     break  # Sai do loop após atualizar o progresso
                 else:
                     print("Opção inválida. Por favor, insira um número válido maior que 0.")
@@ -269,9 +291,8 @@ while True:
             if continuar_atualizacao.lower() == "n":
                 break
             
-            else:
-                print("Opção inválida. Por favor, insira um número válido.")
         
-    elif opcao == "0":
+    elif opcao.isdigit() and int(opcao) == 0:
+        salvar_jogo(jogador)
         print("Saindo do jogo. Até a próxima aventura!")
         break
