@@ -2,6 +2,7 @@
 
 # IMPORTS
 import json
+from pathlib import Path
 
 
 
@@ -163,7 +164,6 @@ def salvar_jogo(jogador, missoes):
     with open("save.json", "w", encoding="utf-8") as arquivo:
         json.dump({"jogador": jogador, "missoes": missoes}, arquivo, ensure_ascii=False, indent=4)
 
-
 # Função para carregar o jogo
 def carregar_jogo():
     with open("save.json", "r", encoding="utf-8") as arquivo:
@@ -231,8 +231,21 @@ nome = input("Digite o seu nome aventureiro: ")
 jogador["nome"] = nome
 
 
-# TESTE JSON
-jogador = carregar_jogo()
+
+# Verificando a existencia de arquivo Json
+def verificar_existencia_json(jogador, missoes):
+    caminho = Path(__file__).resolve().parent / "save.json"
+    # print teste caminho
+    print(caminho)
+    if caminho.exists() and caminho.stat().st_size > 0:
+        return carregar_jogo()
+    else:
+        return jogador, missoes
+
+
+
+# Desenpacotar valores retornados pela função carregar_jogo(), para as variáveis abaixo:
+jogador, missoes = verificar_existencia_json(jogador, missoes)
 
 
 while True:
@@ -293,6 +306,6 @@ while True:
             
         
     elif opcao.isdigit() and int(opcao) == 0:
-        salvar_jogo(jogador)
+        salvar_jogo(jogador, missoes)
         print("Saindo do jogo. Até a próxima aventura!")
         break

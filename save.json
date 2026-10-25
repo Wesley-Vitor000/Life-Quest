@@ -1,7 +1,38 @@
 {
-    "nome": "Wesley",
-    "nivel": 1,
-    "proximo_nivel": 100,
-    "xp": 20,
-    "titulo": "Plebeu da Primeira Jornada"
+    "jogador": {
+        "nome": "Wesley",
+        "nivel": 1,
+        "proximo_nivel": 100,
+        "xp": 20,
+        "titulo": "Plebeu da Primeira Jornada"
+    },
+    "missoes": [
+        {
+            "nome": "Poção do Vigor",
+            "descricao": "Beba água ao longo do dia",
+            "meta": 3000,
+            "progresso": 3000,
+            "unidade": "ml",
+            "recompensa": 20,
+            "status": "concluida"
+        },
+        {
+            "nome": "Caminhada do Herói",
+            "descricao": "Caminhe 10.000 passos",
+            "meta": 10000,
+            "progresso": 0,
+            "unidade": "passos",
+            "recompensa": 50,
+            "status": "nao iniciada"
+        },
+        {
+            "nome": "Sono do Guardião",
+            "descricao": "Durma 8 horas por noite",
+            "meta": 8,
+            "progresso": 0,
+            "unidade": "horas",
+            "recompensa": 30,
+            "status": "nao iniciada"
+        }
+    ]
 }
