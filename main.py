@@ -159,16 +159,48 @@ def selecionar_missao_para_atualizar(missoes):
 
 
 
+
+
+def obter_caminho_save():
+    caminho = Path(__file__).resolve().parent / "save.json"
+    return caminho
+
+
+
+
 # Função para salvar o jogo
 def salvar_jogo(jogador, missoes):
-    with open("save.json", "w", encoding="utf-8") as arquivo:
+    with open(obter_caminho_save(), "w", encoding="utf-8") as arquivo:
         json.dump({"jogador": jogador, "missoes": missoes}, arquivo, ensure_ascii=False, indent=4)
 
 # Função para carregar o jogo
 def carregar_jogo():
-    with open("save.json", "r", encoding="utf-8") as arquivo:
+    with open(obter_caminho_save(), "r", encoding="utf-8") as arquivo:
         dados_jogo = json.load(arquivo)
         return dados_jogo["jogador"], dados_jogo["missoes"]
+
+
+
+
+# Verificando a existencia de arquivo Json
+def verificar_existencia_json(jogador, missoes):
+    caminho = obter_caminho_save()
+    
+    if caminho.exists() and caminho.stat().st_size > 0:
+        
+        try:
+            return carregar_jogo()
+        except json.JSONDecodeError as erro:
+            print("Erro ao carregar arquivo", erro)
+            raise SystemExit(1)
+        except KeyError as erro:
+            print("Erro. chave do dicionário não encontrada", erro)
+            raise SystemExit(1)
+    else:
+        return jogador, missoes
+
+
+
 
 # Dados do Jogador
 jogador = {
@@ -229,19 +261,6 @@ titulos = {
 
 nome = input("Digite o seu nome aventureiro: ")
 jogador["nome"] = nome
-
-
-
-# Verificando a existencia de arquivo Json
-def verificar_existencia_json(jogador, missoes):
-    caminho = Path(__file__).resolve().parent / "save.json"
-    # print teste caminho
-    print(caminho)
-    if caminho.exists() and caminho.stat().st_size > 0:
-        return carregar_jogo()
-    else:
-        return jogador, missoes
-
 
 
 # Desenpacotar valores retornados pela função carregar_jogo(), para as variáveis abaixo:
