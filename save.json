@@ -20,7 +20,7 @@
             "nome": "Caminhada do Herói",
             "descricao": "Caminhe 10.000 passos",
             "meta": 10000,
-            "progresso": 0,
+            "progresso": 600,
             "unidade": "passos",
             "recompensa": 50,
             "status": "em andamento"
@@ -32,7 +32,7 @@
             "progresso": 0,
             "unidade": "horas",
             "recompensa": 30,
-            "status": "nao iniciada"
+            "status": "em andamento"
         }
     ]
 }

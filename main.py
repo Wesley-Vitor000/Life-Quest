@@ -2,6 +2,7 @@
 
 # IMPORTS
 import json
+import os
 from pathlib import Path
 
 
@@ -95,7 +96,7 @@ def verificar_nivel(jogador):
 
 
 # Função exibir quadro de missões e iniciar missão
-def exibir_quadro_missoes_e_iniciar(missoes):
+def exibir_quadro_missoes_e_iniciar(jogador, missoes):
     print("\n===== QUADRO DE MISSÕES =====")
     
     indice = 0
@@ -126,6 +127,7 @@ def exibir_quadro_missoes_e_iniciar(missoes):
                 print(f"A missão '{missao['nome']}' já está em andamento. Você pode atualizar o progresso no menu de atualização de missões.")
             elif missao["status"] == "nao iniciada":
                 iniciar_missao(missao)
+                salvar_jogo(jogador, missoes)
         elif escolha == "0":
             return escolha
         else:
@@ -170,9 +172,16 @@ def obter_caminho_save():
 
 # Função para salvar o jogo
 def salvar_jogo(jogador, missoes):
-    with open(obter_caminho_save(), "w", encoding="utf-8") as arquivo:
+    
+    # Criando arquivo temporario para previnir json corrompido
+    caminho = obter_caminho_save()
+    caminho_temporario = caminho.with_suffix(".tmp") # Troca a extensão atual do arquivo por uma temporaria
+    
+    with open(caminho_temporario, "w", encoding="utf-8") as arquivo:
         json.dump({"jogador": jogador, "missoes": missoes}, arquivo, ensure_ascii=False, indent=4)
 
+    os.replace(caminho_temporario, caminho)
+    
 # Função para carregar o jogo
 def carregar_jogo():
     with open(obter_caminho_save(), "r", encoding="utf-8") as arquivo:
@@ -197,6 +206,8 @@ def verificar_existencia_json(jogador, missoes):
             print("Erro. chave do dicionário não encontrada", erro)
             raise SystemExit(1)
     else:
+        nome = input("Digite o seu nome aventureiro: ")
+        jogador["nome"] = nome
         return jogador, missoes
 
 
@@ -259,9 +270,6 @@ titulos = {
 }
 
 
-nome = input("Digite o seu nome aventureiro: ")
-jogador["nome"] = nome
-
 
 # Desenpacotar valores retornados pela função carregar_jogo(), para as variáveis abaixo:
 jogador, missoes = verificar_existencia_json(jogador, missoes)
@@ -286,7 +294,7 @@ while True:
     # Exibir quadro de missões
     elif opcao == "2":
 
-        exibir_quadro_missoes_e_iniciar(missoes)
+        exibir_quadro_missoes_e_iniciar(jogador, missoes)
 
     
     # Atualizar progresso da missão
@@ -303,6 +311,7 @@ while True:
                 if progresso_incremento.isdigit() and int(progresso_incremento) > 0:
                     progresso_incremento = int(progresso_incremento)
                     atualizar_progresso(jogador, missao_selecionada, progresso_incremento)
+                    salvar_jogo(jogador, missoes)
                     break  # Sai do loop após atualizar o progresso
                 else:
                     print("Opção inválida. Por favor, insira um número válido maior que 0.")
