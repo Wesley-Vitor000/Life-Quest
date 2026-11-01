@@ -112,23 +112,26 @@ def exibir_quadro_missoes_e_iniciar(jogador, missoes):
     while True:
         missao = missoes[indice]
         
+        soma_de_indice = 1
+        print(f"\nMissão {indice + soma_de_indice} de {len(missoes)}")
+        print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
+            
+        
         # Lista navegação
         opcoes_navegacao = [
             {"name": "Missão anterior", "value": "a"},
             {"name": "Próxima missão", "value": "p"},
-            {"name": "Iniciar missão", "value": "0"},
+            {"name": "Iniciar missão", "value": "i"},
             {"name": "Voltar", "value": "0"}
         ]
         
         opcao = inquirer.select(
-            message = ""
-        )
+            message = "Escolha uma opção:",
+            choices = opcoes_navegacao
+        ).execute()
         
-        soma_de_indice = 1
-        print(f"\nMissão {indice + soma_de_indice} de {len(missoes)}")
-        print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
-        print("[A] Anterior | [P] Próximo | [I] Iniciar Missão | [0] Voltar ao Menu")
-        escolha = input(">>> ").lower()
+        
+        escolha = opcao
         
         if escolha == "a":
             if indice > 0:
@@ -159,26 +162,77 @@ def exibir_quadro_missoes_e_iniciar(jogador, missoes):
 def selecionar_missao_para_atualizar(missoes):
     print("\n===== ATUALIZAR PROGRESSO DA MISSÃO =====")
     
+    indice = 0
     while True:
-        for i, missao in enumerate(missoes):
-            print(f"{i + 1}. {missao['nome']} - Status: {missao['status']} - Progresso: {missao['progresso']}/{missao['meta']} {missao['unidade']}")
-        print("Digite o número da missão que deseja atualizar ou 0 para voltar ao menu.")
-        missao_selecionada = input(">>> ")
-        if missao_selecionada.isdigit() and 1 <= int(missao_selecionada) <= len(missoes):
-            indice = int(missao_selecionada) - 1
-            if missoes[indice]["status"] == "concluida":
-                print(f"A missão '{missoes[indice]['nome']}' já foi concluída. Por favor, escolha outra missão.")
-                continue
-            elif missoes[indice]["status"] == "nao iniciada":
-                print(f"A missão '{missoes[indice]['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
-                continue
-            elif missoes[indice]["status"] == "em andamento":
-                print(f"Você selecionou a missão '{missoes[indice]['nome']}' para atualizar o progresso.")
-                return missoes[indice]
+        
+        #Versão antiga de exibição das missões
+        
+        # for i, missao in enumerate(missoes):
+        #     print(f"{i + 1}. {missao['nome']} - Status: {missao['status']} - Progresso: {missao['progresso']}/{missao['meta']} {missao['unidade']}")
+        # print("Digite o número da missão que deseja atualizar ou 0 para voltar ao menu.")
+        # missao_selecionada = input(">>> ")
+        
+        # Versão nova de exibição das missões
+        missao = missoes[indice]
+        
+        soma_de_indice = 1
+        print(f"\nMissão {indice + soma_de_indice} de {len(missoes)}")
+        print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
+        
+        # Lista navegação
+        opcoes_navegacao = [
+            {"name": "Missão anterior", "value": "a"},
+            {"name": "Próxima missão", "value": "p"},
+            {"name": "Atualizar progresso", "value": "i"},
+            {"name": "Voltar", "value": "0"}
+        ]
+        
+        opcao = inquirer.select(
+            message = "Escolha uma opção:",
+            choices = opcoes_navegacao
+        ).execute()
+        
+        missao_selecionada = opcao
+        
+        if missao_selecionada == "a":
+            if indice > 0:
+                indice -= 1
+            else:
+                print("Você já está na primeira missão.")
+        
+        elif missao_selecionada == "p":
+            if indice < len(missoes)-1:
+                indice += 1
+            else:
+                print("Você já está na última missão.")
+        elif missao_selecionada == "i":
+            if missao["status"] == "concluida":
+                print(f"A missão '{missao['nome']}' já foi concluida. Escolha outra missão.")
+            elif missao["status"] == "nao iniciada":
+                print(f"A missão '{missao['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
+            elif missao["status"] == "em andamento":
+                print(f"Você selecionou a missão '{missao['nome']}' para atualizar o progresso.")
+                return missao
         elif missao_selecionada == "0":
-            break
+            return opcao
         else:
-            print("Opção inválida. Por favor, escolha uma missão válida ou 0 para voltar ao menu.")
+            print("Opção inválida. Por favor, escolha uma opção válida."
+                  )
+        # if missao_selecionada.isdigit() and 1 <= int(missao_selecionada) <= len(missoes):
+        #     indice = int(missao_selecionada) - 1
+        #     if missoes[indice]["status"] == "concluida":
+        #         print(f"A missão '{missoes[indice]['nome']}' já foi concluída. Por favor, escolha outra missão.")
+        #         continue
+        #     elif missoes[indice]["status"] == "nao iniciada":
+        #         print(f"A missão '{missoes[indice]['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
+        #         continue
+        #     elif missoes[indice]["status"] == "em andamento":
+        #         print(f"Você selecionou a missão '{missoes[indice]['nome']}' para atualizar o progresso.")
+        #         return missoes[indice]
+        # elif missao_selecionada == "0":
+        #     break
+        # else:
+        #     print("Opção inválida. Por favor, escolha uma missão válida ou 0 para voltar ao menu.")
 
 
 
