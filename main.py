@@ -214,7 +214,7 @@ def selecionar_missao_para_atualizar(missoes):
                 print(f"Você selecionou a missão '{missao['nome']}' para atualizar o progresso.")
                 return missao
         elif missao_selecionada == "0":
-            return opcao
+            return None 
         else:
             print("Opção inválida. Por favor, escolha uma opção válida."
                   )
