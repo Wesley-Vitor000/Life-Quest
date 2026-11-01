@@ -4,6 +4,7 @@
 import json
 import os
 from pathlib import Path
+from InquirerPy import inquirer
 
 
 
@@ -12,13 +13,20 @@ from pathlib import Path
 
 # Função para exibir o menu principal
 def exibir_menu():
-    print("\n===== MENU PRINCIPAL =====")
-    print("1. Exibir status do jogador")
-    print("2. Exibir quadro de missões")
-    print("3. Atualizar progresso da missão")
-    print("0. Sair do jogo")
+    opcoes = [
+        {"name": "Exibir status do jogador", "value": "status"},
+        {"name": "Exibir quadro de missões", "value": "missoes"},
+        {"name": "Atualizar progresso da missão", "value": "progresso"},
+        {"name": "Sair do jogo", "value": "finalizar"}
+    ]
 
-
+    opcao = inquirer.select(
+        message="⚔️ Escolha sua ação:",
+        choices=opcoes
+    ).execute()
+    
+    return opcao
+    
 # Função para exibir status do jogador
 def exibir_status(jogador):
     print("\n===== STATUS DO JOGADOR =====")
@@ -103,6 +111,19 @@ def exibir_quadro_missoes_e_iniciar(jogador, missoes):
     
     while True:
         missao = missoes[indice]
+        
+        # Lista navegação
+        opcoes_navegacao = [
+            {"name": "Missão anterior", "value": "a"},
+            {"name": "Próxima missão", "value": "p"},
+            {"name": "Iniciar missão", "value": "0"},
+            {"name": "Voltar", "value": "0"}
+        ]
+        
+        opcao = inquirer.select(
+            message = ""
+        )
+        
         soma_de_indice = 1
         print(f"\nMissão {indice + soma_de_indice} de {len(missoes)}")
         print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
@@ -186,6 +207,14 @@ def salvar_jogo(jogador, missoes):
 def carregar_jogo():
     with open(obter_caminho_save(), "r", encoding="utf-8") as arquivo:
         dados_jogo = json.load(arquivo)
+        # Verifica se o proprio dados_jogo é um dicionario
+        if not isinstance(dados_jogo, dict):
+            raise TypeError("A estrutura do save.json está invalida, pois não está como dicionário.")
+        
+        if not isinstance(dados_jogo["jogador"], dict) or not isinstance(dados_jogo["missoes"], list):
+            raise TypeError("Erro. Um dos dados jogador ou missões estão com seu type incorret.")
+        
+        # Caso isinstance = True, Return
         return dados_jogo["jogador"], dados_jogo["missoes"]
 
 
@@ -195,7 +224,7 @@ def carregar_jogo():
 def verificar_existencia_json(jogador, missoes):
     caminho = obter_caminho_save()
     
-    if caminho.exists() and caminho.stat().st_size > 0:
+    if caminho.exists():
         
         try:
             return carregar_jogo()
@@ -205,6 +234,10 @@ def verificar_existencia_json(jogador, missoes):
         except KeyError as erro:
             print("Erro. chave do dicionário não encontrada", erro)
             raise SystemExit(1)
+        except TypeError as erro:
+            print("Erro encontrado.. Fechando programa..", erro)
+            raise SystemExit(1)
+        
     else:
         nome = input("Digite o seu nome aventureiro: ")
         jogador["nome"] = nome
@@ -276,29 +309,21 @@ jogador, missoes = verificar_existencia_json(jogador, missoes)
 
 
 while True:
-    exibir_menu()
-    opcao = input(">>> ")
-
+    opcao = exibir_menu()
+    
     # Exibir status do jogador
-    if opcao == "1":
-        while True:
-            exibir_status(jogador)
-            voltar_status = input(">>> ")
-            
-            if voltar_status.isdigit() and int(voltar_status) == 0:
-                break
-            else:
-                print("Opção inválida. Por favor, digite 0 para voltar ao menu.")
-                
+    if opcao == "status":
+        exibir_status(jogador)
+
 
     # Exibir quadro de missões
-    elif opcao == "2":
+    elif opcao == "missoes":
 
         exibir_quadro_missoes_e_iniciar(jogador, missoes)
 
     
     # Atualizar progresso da missão
-    elif opcao == "3":
+    elif opcao == "progresso":
         while True:
             missao_selecionada = selecionar_missao_para_atualizar(missoes)
             if missao_selecionada is None:
@@ -333,7 +358,7 @@ while True:
                 break
             
         
-    elif opcao.isdigit() and int(opcao) == 0:
+    elif opcao == "finalizar":
         salvar_jogo(jogador, missoes)
         print("Saindo do jogo. Até a próxima aventura!")
         break
