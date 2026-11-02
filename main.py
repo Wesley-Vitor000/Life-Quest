@@ -44,7 +44,7 @@ def exibir_status(jogador):
     
     print(f"XP: {jogador['xp']} / {jogador['proximo_nivel']} {barra_preenchida}{barra_vazia} ({porcentagem_xp:.0f}%)")
     print(f"Título: {jogador['titulo']}")
-    print("Digite 0 para voltar ao menu.")
+    
 
 
 
@@ -105,17 +105,20 @@ def verificar_nivel(jogador):
 
 # Função exibir quadro de missões e iniciar missão
 def exibir_quadro_missoes_e_iniciar(jogador, missoes):
-    print("\n===== QUADRO DE MISSÕES =====")
+
     
     indice = 0
     
     while True:
+        limpar_terminal() 
+        print("\n===== QUADRO DE MISSÕES =====")
+        
         missao = missoes[indice]
         
         soma_de_indice = 1
         print(f"\nMissão {indice + soma_de_indice} de {len(missoes)}")
         print(f"{indice + soma_de_indice}. {missao['nome']}\nDescrição: {missao['descricao']}\nMeta: {missao['meta']}\nProgresso: {missao['progresso']}\nUnidade: {missao['unidade']}\nRecompensa: {missao['recompensa']}Xp\nStatus: {missao['status']}\n")
-            
+           
         
         # Lista navegação
         opcoes_navegacao = [
@@ -138,20 +141,25 @@ def exibir_quadro_missoes_e_iniciar(jogador, missoes):
                 indice -= 1
             else:
                 print("Você já está na primeira missão.")
+                pausar_terminal()
         
         elif escolha == "p":
             if indice < len(missoes) -1:
                 indice += 1
             else:
                 print("Você já está na última missão.")
+                pausar_terminal()
         elif escolha == "i":
             if missao["status"] == "concluida":
                 print(f"A missão '{missao['nome']}' já foi concluída. Escolha outra missão.")
+                pausar_terminal()
             elif missao["status"] == "em andamento":
                 print(f"A missão '{missao['nome']}' já está em andamento. Você pode atualizar o progresso no menu de atualização de missões.")
+                pausar_terminal()
             elif missao["status"] == "nao iniciada":
                 iniciar_missao(missao)
                 salvar_jogo(jogador, missoes)
+                pausar_terminal()
         elif escolha == "0":
             return escolha
         else:
@@ -160,17 +168,11 @@ def exibir_quadro_missoes_e_iniciar(jogador, missoes):
 
 # Função para exibir missões e permitir ao jogador escolher uma para atualizar o progresso
 def selecionar_missao_para_atualizar(missoes):
-    print("\n===== ATUALIZAR PROGRESSO DA MISSÃO =====")
-    
+   
     indice = 0
     while True:
-        
-        #Versão antiga de exibição das missões
-        
-        # for i, missao in enumerate(missoes):
-        #     print(f"{i + 1}. {missao['nome']} - Status: {missao['status']} - Progresso: {missao['progresso']}/{missao['meta']} {missao['unidade']}")
-        # print("Digite o número da missão que deseja atualizar ou 0 para voltar ao menu.")
-        # missao_selecionada = input(">>> ")
+        limpar_terminal()
+        print("\n===== ATUALIZAR PROGRESSO DA MISSÃO =====")
         
         # Versão nova de exibição das missões
         missao = missoes[indice]
@@ -199,40 +201,31 @@ def selecionar_missao_para_atualizar(missoes):
                 indice -= 1
             else:
                 print("Você já está na primeira missão.")
+                pausar_terminal()
         
         elif missao_selecionada == "p":
             if indice < len(missoes)-1:
                 indice += 1
             else:
                 print("Você já está na última missão.")
+                pausar_terminal()
         elif missao_selecionada == "i":
             if missao["status"] == "concluida":
                 print(f"A missão '{missao['nome']}' já foi concluida. Escolha outra missão.")
+                pausar_terminal()
             elif missao["status"] == "nao iniciada":
                 print(f"A missão '{missao['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
+                pausar_terminal()
             elif missao["status"] == "em andamento":
                 print(f"Você selecionou a missão '{missao['nome']}' para atualizar o progresso.")
+                pausar_terminal()
                 return missao
         elif missao_selecionada == "0":
             return None 
         else:
-            print("Opção inválida. Por favor, escolha uma opção válida."
-                  )
-        # if missao_selecionada.isdigit() and 1 <= int(missao_selecionada) <= len(missoes):
-        #     indice = int(missao_selecionada) - 1
-        #     if missoes[indice]["status"] == "concluida":
-        #         print(f"A missão '{missoes[indice]['nome']}' já foi concluída. Por favor, escolha outra missão.")
-        #         continue
-        #     elif missoes[indice]["status"] == "nao iniciada":
-        #         print(f"A missão '{missoes[indice]['nome']}' ainda não foi iniciada. Por favor, inicie a missão antes de atualizar o progresso.")
-        #         continue
-        #     elif missoes[indice]["status"] == "em andamento":
-        #         print(f"Você selecionou a missão '{missoes[indice]['nome']}' para atualizar o progresso.")
-        #         return missoes[indice]
-        # elif missao_selecionada == "0":
-        #     break
-        # else:
-        #     print("Opção inválida. Por favor, escolha uma missão válida ou 0 para voltar ao menu.")
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+            pausar_terminal()
+       
 
 
 
@@ -296,8 +289,15 @@ def verificar_existencia_json(jogador, missoes):
         nome = input("Digite o seu nome aventureiro: ")
         jogador["nome"] = nome
         return jogador, missoes
-
-
+    
+# Função para limpar o terminal (temporaria)
+def limpar_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+# Função para pausar o terminal (temporaria)
+def pausar_terminal():
+    input("Pressione Enter para continuar...")
+    
 
 
 # Dados do Jogador
