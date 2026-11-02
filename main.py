@@ -218,7 +218,6 @@ def selecionar_missao_para_atualizar(missoes):
                 pausar_terminal()
             elif missao["status"] == "em andamento":
                 print(f"Você selecionou a missão '{missao['nome']}' para atualizar o progresso.")
-                pausar_terminal()
                 return missao
         elif missao_selecionada == "0":
             return None 
@@ -363,11 +362,13 @@ jogador, missoes = verificar_existencia_json(jogador, missoes)
 
 
 while True:
+    limpar_terminal()
     opcao = exibir_menu()
     
     # Exibir status do jogador
     if opcao == "status":
         exibir_status(jogador)
+        pausar_terminal()
 
 
     # Exibir quadro de missões
