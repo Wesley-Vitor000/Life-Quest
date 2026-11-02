@@ -398,17 +398,25 @@ while True:
                 
             # While da pergunta
             while True:
-                continuar_atualizacao = input("Deseja atualizar outra missão? (s/n): ")
+                continuar_atualizacao = [
+                    {"name": "Sim", "value": "s"},
+                    {"name": "Não", "value": "n"}
+                ]
                 
-                if continuar_atualizacao.lower() == "s":
+                opcao_continuar = inquirer.select(
+                    message="Deseja continuar atualizando o progresso da missão?",
+                    choices=continuar_atualizacao
+                ).execute()
+                
+                if opcao_continuar == "s":
                     break
-                elif continuar_atualizacao.lower() == "n":
+                elif opcao_continuar == "n":
                     break
                 else:
                     print("Opção inválida. Por favor, insira 's' para sim ou 'n' para não.")
                 
             # Sai do loop principal se o usuário não quiser continuar atualizando
-            if continuar_atualizacao.lower() == "n":
+            if opcao_continuar == "n":
                 break
             
         
