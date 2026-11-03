@@ -13,10 +13,12 @@ from InquirerPy import inquirer
 
 # Função para exibir o menu principal
 def exibir_menu():
+    print("\n===== LIFE QUEST =====")
     opcoes = [
         {"name": "Exibir status do jogador", "value": "status"},
         {"name": "Exibir quadro de missões", "value": "missoes"},
         {"name": "Atualizar progresso da missão", "value": "progresso"},
+        {"name": "Elixir da Fênix (Resetar jogo)", "value": "resetar"},
         {"name": "Sair do jogo", "value": "finalizar"}
     ]
 
@@ -296,7 +298,40 @@ def limpar_terminal():
 # Função para pausar o terminal (temporaria)
 def pausar_terminal():
     input("Pressione Enter para continuar...")
+
+
+
+# Função para resetar dados do jogador e missões (temporário)
+def resetar_jogo(jogador, missoes):
+    confirmacao = [
+        {"name": "Sim", "value": "s"},
+        {"name": "Não", "value": "n"}
+    ]
+        
+        
+    opcao = inquirer.select(
+        message="Tem certeza que deseja tomar esse elixir e resetar todo o progresso, guerreiro? Esta ação não pode ser desfeita.",
+        choices=confirmacao
+    ).execute()
     
+    # Se o jogador confirmar, resetar os dados
+    if opcao == "s":
+        jogador["nivel"] = 1
+        jogador["proximo_nivel"] = 100
+        jogador["xp"] = 0
+        jogador["titulo"] = "Plebeu da Primeira Jornada"
+        
+        for missao in missoes:
+            missao["progresso"] = 0
+            missao["status"] = "nao iniciada"
+        
+        salvar_jogo(jogador, missoes)
+        print("Jogo resetado com sucesso!")
+        pausar_terminal()
+    elif opcao == "n":
+        print("Reset do jogo cancelado. Tome bastante cuidado, aventureiro! Algumas ações não podem ser desfeitas.")
+        pausar_terminal()
+
 
 
 # Dados do Jogador
@@ -397,29 +432,26 @@ while True:
                     print("Opção inválida. Por favor, insira um número válido maior que 0.")
                     continue
                 
-            # While da pergunta
-            while True:
-                continuar_atualizacao = [
-                    {"name": "Sim", "value": "s"},
-                    {"name": "Não", "value": "n"}
-                ]
-                
-                opcao_continuar = inquirer.select(
-                    message="Deseja continuar atualizando o progresso da missão?",
-                    choices=continuar_atualizacao
-                ).execute()
-                
-                if opcao_continuar == "s":
-                    break
-                elif opcao_continuar == "n":
-                    break
-                else:
-                    print("Opção inválida. Por favor, insira 's' para sim ou 'n' para não.")
-                
+            # Pergunta se o usuário deseja continuar atualizando o progresso da missão
+            continuar_atualizacao = [
+                {"name": "Sim", "value": "s"},
+                {"name": "Não", "value": "n"}
+            ]
+            
+            opcao_continuar = inquirer.select(
+                message="Deseja continuar atualizando o progresso da missão?",
+                choices=continuar_atualizacao
+            ).execute()
+            
             # Sai do loop principal se o usuário não quiser continuar atualizando
             if opcao_continuar == "n":
                 break
             
+    
+    # Resetar jogo
+    elif opcao == "resetar":
+        resetar_jogo(jogador, missoes)
+    
         
     elif opcao == "finalizar":
         salvar_jogo(jogador, missoes)
